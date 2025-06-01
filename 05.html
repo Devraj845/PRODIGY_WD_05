@@ -1,0 +1,149 @@
+<!-- Blue Gradient Square
+Circle with gradient
+Blue Gradient Square
+Circle with gradient
+Blue Gradient Square
+Build a web page that fetches weather data from a weather API based on the user's location or a user-inputted location.
+Display the current weather conditions, temperature, and other relevant information. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gradient Weather App</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom, #1e3c72, #2a5298);
+      color: white;
+      text-align: center;
+      padding: 50px 20px;
+      overflow-x: hidden;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+    }
+
+    input, button {
+      padding: 12px 16px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: none;
+      margin: 10px 5px;
+      outline: none;
+    }
+
+    input {
+      width: 220px;
+    }
+
+    button {
+      background: #00c6ff;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #0072ff;
+    }
+
+    .weather-box {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 30px 20px;
+      max-width: 400px;
+      margin: 50px auto 0;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    }
+
+    .weather-box img {
+      margin: 10px 0;
+    }
+
+    /* Decorative shapes */
+    .decor {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.2;
+      z-index: -1;
+    }
+
+    .circle {
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, #00c6ff, #0072ff);
+    }
+
+    .square {
+      width: 150px;
+      height: 150px;
+      background: linear-gradient(to right, #36d1dc, #5b86e5);
+      border-radius: 10px;
+    }
+
+    .circle1 { top: 50px; left: 30px; }
+    .square1 { top: 120px; right: 30px; }
+    .circle2 { bottom: 90px; right: 50px; }
+    .square2 { bottom: 100px; left: 20px; }
+    .square3 { top: 300px; left: -50px; }
+  </style>
+</head>
+<body>
+
+  <!-- Decorative Shapes -->
+  <div class="decor circle circle1"></div>
+  <div class="decor square square1"></div>
+  <div class="decor circle circle2"></div>
+  <div class="decor square square2"></div>
+  <div class="decor square square3"></div>
+
+  <h1>🌤 Gradient Weather App</h1>
+
+  <div>
+    <input type="text" id="locationInput" placeholder="Enter location" />
+    <button onclick="getWeather()">Get Weather</button>
+  </div>
+
+  <div class="weather-box" id="weather">
+    <p>Enter a location to see the weather info.</p>
+  </div>
+
+  <script>
+    async function getWeather() {
+      const location = document.getElementById('locationInput').value.trim();
+      if (!location) return;
+
+      const apiKey = 'dd61c466b8914b84b80180719251905';
+      const url = `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${encodeURIComponent(location)}&aqi=no`;
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.error) {
+          document.getElementById('weather').innerHTML = `<p>Error: ${data.error.message}</p>`;
+          return;
+        }
+
+        const weatherHTML = `
+          <h2>${data.location.name}, ${data.location.country}</h2>
+          <p><strong>${data.current.condition.text}</strong></p>
+          <img src="${data.current.condition.icon}" alt="Weather icon" />
+          <p>🌡 Temperature: ${data.current.temp_c}°C</p>
+          <p>💧 Humidity: ${data.current.humidity}%</p>
+          <p>💨 Wind Speed: ${data.current.wind_kph} kph</p>
+        `;
+        document.getElementById('weather').innerHTML = weatherHTML;
+      } catch (error) {
+        document.getElementById('weather').innerHTML = `<p>Failed to fetch weather data.</p>`;
+      }
+    }
+  </script>
+
+</body>
+</html>
